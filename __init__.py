@@ -48,9 +48,6 @@ def display_msg_box(message="", title="Info", icon='INFO'):
 def writeBAM(context, filepath, material_mode, physics_engine, pipeline, no_srgb, texture_mode, anim_mode, invisible_coll):
     proc = None
     python_path = bpy.context.preferences.addons[__name__].preferences.python_path
-    if not os.path.isfile(python_path):
-        display_msg_box(message="Python executable for Panda3D not found. Please set the correct full path for it in the Blender addon preferences.", title="Info", icon='INFO')
-        return {'FINISHED'}
     blender_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     current_filepath = bpy.data.filepath
     if current_filepath == "":
