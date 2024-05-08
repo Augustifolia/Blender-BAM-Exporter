@@ -102,6 +102,9 @@ def writeBAM(context, filepath, material_mode, physics_engine, pipeline, no_srgb
     except subprocess.TimeoutExpired as e:
         print(e.output)
         display_msg_box(message="Attempted to export, but reached a time out.", title="Error", icon='ERROR')
+    except Exception as e:
+        display_msg_box(message=e, title="Error", icon='ERROR')
+
 
     if not os.path.isfile(filepath):
         print("\nFailed to export BAM.\n")
