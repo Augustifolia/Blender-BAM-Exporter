@@ -23,9 +23,9 @@ class BAMPrefs(bpy.types.AddonPreferences):
     bl_idname = __name__
 
     python_path: StringProperty(
-        name="Python Path",
-        description="Absolute path of the Python executable used by Panda3D. Usually inside the 'python' folder in your main Panda3D installation folder",
-        default="C:\\Panda3D\\python\\python.exe",
+        name="Python Command",
+        description="Command to use python. Maybe python3 in some cases.",
+        default="python",
         subtype='FILE_PATH'
     )
 
