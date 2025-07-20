@@ -28,17 +28,17 @@ class BAMPrefs(bpy.types.AddonPreferences):
         default="python",
         subtype='FILE_PATH'
     )
-    blender_path: StringProperty(
+    blender_dir: StringProperty(
         name="Blender Path",
-        description="Command to use Blender.",
+        description="The directory where Blender is installed. ",
         default="",
-        subtype='FILE_PATH'
+        subtype='DIR_PATH'
     )
 
     def draw(self, context):
         layout = self.layout
         layout.prop(self, "python_path")
-        layout.prop(self, "blender_path")
+        layout.prop(self, "blender_dir")
 
 def display_msg_box(message="", title="Info", icon='INFO'):
     ''' Open a pop-up message box to notify the user of something               '''
@@ -55,7 +55,7 @@ def display_msg_box(message="", title="Info", icon='INFO'):
 def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, texture_mode, anim_mode, invisible_coll):
     proc = None
     python_path = bpy.context.preferences.addons[__name__].preferences.python_path
-    blender_dir = bpy.context.preferences.addons[__name__].preferences.blender_path
+    blender_dir = bpy.context.preferences.addons[__name__].preferences.blender_dir
     if blender_dir == "":
         blender_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     current_filepath = bpy.data.filepath
