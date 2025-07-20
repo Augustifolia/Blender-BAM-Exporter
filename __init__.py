@@ -45,7 +45,7 @@ def display_msg_box(message="", title="Info", icon='INFO'):
 
     bpy.context.window_manager.popup_menu(draw, title=title, icon=icon)
 
-def writeBAM(context, filepath, material_mode, physics_engine, pipeline, no_srgb, texture_mode, anim_mode, invisible_coll):
+def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, texture_mode, anim_mode, invisible_coll):
     proc = None
     python_path = bpy.context.preferences.addons[__name__].preferences.python_path
     blender_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -88,7 +88,7 @@ def writeBAM(context, filepath, material_mode, physics_engine, pipeline, no_srgb
     source_file = str(source_file).replace("\\","/").replace("//","/")
     blender_dir = blender_dir.replace("\\","/").replace("//","/")
 
-    command = [python_path, "-m", "blend2bam", source_file, filepath, "--material-mode", material_mode, "--physics-engine", physics_engine, "--pipeline", pipeline, "--textures", texture_mode, "--animations", anim_mode, "--invisible-collisions-collection", invisible_coll, "--blender-dir", blender_dir,]
+    command = [python_path, "-m", "blend2bam", source_file, filepath, "--material-mode", material_mode, "--physics-engine", physics_engine, "--textures", texture_mode, "--animations", anim_mode, "--invisible-collisions-collection", invisible_coll, "--blender-dir", blender_dir,]
     if no_srgb:
         command.append("--no-srgb")
     
@@ -144,18 +144,9 @@ class ExportBAM(Operator, ExportHelper):
         ),
         default='builtin',
     )
-    pipeline: EnumProperty(
-        name="Pipeline",
-        description="the backend pipeline used to convert files (default: gltf)",
-        items=(
-            ('gltf', "gltf", "glTF - GL Transmission Format"),
-            ('egg', "egg", "egg - 3D model format used by Panda3D"),
-        ),
-        default='gltf',
-    )
     no_srgb: BoolProperty(
         name="No sRGB",
-        description="If checked, textures will not be loaded as sRGB textures (only for glTF pipelines) (default: Disabled)",
+        description="If checked, textures will not be loaded as sRGB textures (default: Disabled)",
         default=False,
     )
     texture_mode: EnumProperty(
@@ -185,7 +176,7 @@ class ExportBAM(Operator, ExportHelper):
     )
 
     def execute(self, context):
-        return writeBAM(context, self.filepath, self.material_mode, self.physics_engine, self.pipeline, self.no_srgb, self.texture_mode, self.anim_mode, self.invisible_coll)
+        return writeBAM(context, self.filepath, self.material_mode, self.physics_engine, self.no_srgb, self.texture_mode, self.anim_mode, self.invisible_coll)
 
 def menu_func_export(self, context):
     self.layout.operator(ExportBAM.bl_idname, text="Panda3D (.bam)")
