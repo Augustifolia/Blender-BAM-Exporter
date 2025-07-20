@@ -28,10 +28,17 @@ class BAMPrefs(bpy.types.AddonPreferences):
         default="python",
         subtype='FILE_PATH'
     )
+    blender_path: StringProperty(
+        name="Blender Path",
+        description="Command to use Blender.",
+        default="",
+        subtype='FILE_PATH'
+    )
 
     def draw(self, context):
         layout = self.layout
         layout.prop(self, "python_path")
+        layout.prop(self, "blender_path")
 
 def display_msg_box(message="", title="Info", icon='INFO'):
     ''' Open a pop-up message box to notify the user of something               '''
@@ -48,7 +55,9 @@ def display_msg_box(message="", title="Info", icon='INFO'):
 def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, texture_mode, anim_mode, invisible_coll):
     proc = None
     python_path = bpy.context.preferences.addons[__name__].preferences.python_path
-    blender_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    blender_dir = bpy.context.preferences.addons[__name__].preferences.blender_path
+    if blender_dir == "":
+        blender_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
     current_filepath = bpy.data.filepath
     if current_filepath == "":
         display_msg_box(message="You must first save your Blender file to your hard drive.", title="Info", icon='INFO')
