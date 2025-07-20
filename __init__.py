@@ -52,7 +52,7 @@ def display_msg_box(message="", title="Info", icon='INFO'):
 
     bpy.context.window_manager.popup_menu(draw, title=title, icon=icon)
 
-def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, texture_mode, anim_mode, invisible_coll):
+def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, allow_double_sided, texture_mode, anim_mode, invisible_coll):
     proc = None
     python_path = bpy.context.preferences.addons[__name__].preferences.python_path
     blender_dir = bpy.context.preferences.addons[__name__].preferences.blender_dir
@@ -100,6 +100,8 @@ def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, texture_
     command = [python_path, "-m", "blend2bam", source_file, filepath, "--material-mode", material_mode, "--physics-engine", physics_engine, "--textures", texture_mode, "--animations", anim_mode, "--invisible-collisions-collection", invisible_coll, "--blender-dir", blender_dir,]
     if no_srgb:
         command.append("--no-srgb")
+    if allow_double_sided:
+        command.append("--allow-double-sided-materials")
     
     try:
         print("\nAttempting BAM export...\n")
@@ -158,6 +160,11 @@ class ExportBAM(Operator, ExportHelper):
         description="If checked, textures will not be loaded as sRGB textures (default: Disabled)",
         default=False,
     )
+    allow_double_sided: BoolProperty(
+        name="Allow double sided materials",
+        description="If checked, materials are allowed to be double sided (default: Disabled)",
+        default=False,
+    )
     texture_mode: EnumProperty(
         name="Texture Mode",
         description="How to handle external textures (default: Reference)",
@@ -185,7 +192,7 @@ class ExportBAM(Operator, ExportHelper):
     )
 
     def execute(self, context):
-        return writeBAM(context, self.filepath, self.material_mode, self.physics_engine, self.no_srgb, self.texture_mode, self.anim_mode, self.invisible_coll)
+        return writeBAM(context, self.filepath, self.material_mode, self.physics_engine, self.no_srgb, self.allow_double_sided, self.texture_mode, self.anim_mode, self.invisible_coll)
 
 def menu_func_export(self, context):
     self.layout.operator(ExportBAM.bl_idname, text="Panda3D (.bam)")
