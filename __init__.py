@@ -97,7 +97,13 @@ def writeBAM(context, filepath, material_mode, physics_engine, no_srgb, allow_do
     source_file = str(source_file).replace("\\","/").replace("//","/")
     blender_dir = blender_dir.replace("\\","/").replace("//","/")
 
-    command = [python_path, "-m", "blend2bam", source_file, filepath, "--material-mode", material_mode, "--physics-engine", physics_engine, "--textures", texture_mode, "--animations", anim_mode, "--invisible-collisions-collection", invisible_coll, "--blender-dir", blender_dir,]
+    command = [python_path, "-m", "blend2bam", source_file, filepath, "--verbose",
+               "--material-mode", material_mode,
+               "--physics-engine", physics_engine,
+               "--textures", texture_mode,
+               "--animations", anim_mode,
+               "--invisible-collisions-collection", invisible_coll,
+               "--blender-dir", blender_dir,]
     if no_srgb:
         command.append("--no-srgb")
     if allow_double_sided:
